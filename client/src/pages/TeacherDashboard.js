@@ -14,9 +14,8 @@ import {
 
 import { io } from "socket.io-client";
 
-const socket = io("https://your-frontend.vercel.app", {
-  path: "/api/socketio"
-});
+const socket = io("https://live-polling-server.onrender.com");
+
 
 
 const TeacherDashboard = () => {
