@@ -1,12 +1,11 @@
 {
-  "rewrites": [
-    {
-      "source": "/socket.io/:match*",
-      "destination": "/api/server"
-    },
-    {
-      "source": "/api/socketio",
-      "destination": "/api/server"
-    }
+  "version": 2,
+  "builds": [
+    { "src": "server/server.js", "use": "@vercel/node" },
+    { "src": "client/package.json", "use": "@vercel/static-build" }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "server/server.js" },
+    { "src": "/(.*)", "dest": "client/$1" }
   ]
 }
