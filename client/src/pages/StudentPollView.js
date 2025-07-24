@@ -13,7 +13,6 @@ import {
 } from "react-bootstrap";
 
 
-const socket = io("https://live-polling-server.onrender.com");
 
 
 

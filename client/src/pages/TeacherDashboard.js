@@ -16,7 +16,6 @@ import {
 
 
 
-const socket = io("https://live-polling-server.onrender.com");
 
 
 
