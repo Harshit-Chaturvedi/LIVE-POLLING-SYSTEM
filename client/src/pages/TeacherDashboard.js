@@ -14,7 +14,7 @@ import {
   InputGroup,
 } from "react-bootstrap";
 
-import { io } from "socket.io-client";
+
 
 const socket = io("https://live-polling-server.onrender.com");
 
