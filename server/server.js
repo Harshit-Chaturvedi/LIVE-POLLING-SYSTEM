@@ -6,30 +6,23 @@ const path = require("path");
 
 const app = express();
 const server = http.createServer(app);
+
 const io = new Server(server, {
   cors: {
-    origin: [
-      "http://localhost:3000",
-      "https://your-frontend.vercel.app",
-      "https://live-polling-system-xvcf.onrender.com" // your backend itself
-    ],
+    origin: "*", // You can restrict this later
     methods: ["GET", "POST"]
   }
 });
 
-// ✅ Health-check endpoint
-app.get("/", (req, res) => {
-  res.send("✅ Live Polling Backend is running!");
-});
-
-// (Optional) Add any other REST endpoints under "/api" here
-
+// ======================
+// 🔌 Socket.IO Logic
+// ======================
 let currentPoll = null;
 let responses = [];
 
 io.on("connection", (socket) => {
   console.log("🔌 New socket connected:", socket.id);
-  
+
   if (currentPoll) {
     socket.emit("newPoll", currentPoll);
   }
@@ -37,7 +30,7 @@ io.on("connection", (socket) => {
   socket.on("createPoll", (pollData) => {
     currentPoll = pollData;
     responses = [];
-    io.emit("newPoll", currentPoll);
+    io.emit("newPoll", pollData);
   });
 
   socket.on("submitAnswer", (answerData) => {
@@ -56,7 +49,20 @@ io.on("connection", (socket) => {
   });
 });
 
+// ======================
+// ⚙️ Serve React frontend
+// ======================
+const buildPath = path.join(__dirname, "../client/build");
+app.use(express.static(buildPath));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(buildPath, "index.html"));
+});
+
+// ======================
+// 🚀 Start the server
+// ======================
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-  console.log(`🚀 Server listening on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
