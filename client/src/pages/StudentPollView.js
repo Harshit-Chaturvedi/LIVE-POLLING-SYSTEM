@@ -1,7 +1,7 @@
 // src/pages/StudentPollView.js
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { io } from "socket.io-client";
+
 import socket from "../socket";
 
 import {
