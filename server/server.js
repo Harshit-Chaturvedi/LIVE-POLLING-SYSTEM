@@ -53,15 +53,19 @@ io.on("connection", (socket) => {
 // ⚙️ Serve React frontend
 // ======================
 // Serve React frontend
+// ======================
+// ⚙️ Serve React frontend
+// ======================
 const buildPath = path.join(__dirname, "../client/build");
 app.use(express.static(buildPath));
 
-// 🛡️ Override any malformed behavior before it hits the wildcard
-app.get("*", (req, res, next) => {
-  // Bypass any suspicious routing logic from dependencies
-  delete req.route;
-  delete req.params;
-  next();
+app.get("*", (req, res) => {
+  try {
+    res.sendFile(path.join(buildPath, "index.html"));
+  } catch (err) {
+    console.error("Static serve error:", err);
+    res.status(500).send("Server error");
+  }
 });
 
 app.get("*", (req, res) => {
