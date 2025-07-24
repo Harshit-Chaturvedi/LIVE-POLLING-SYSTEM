@@ -52,12 +52,15 @@ io.on("connection", (socket) => {
 // ======================
 // ⚙️ Serve React frontend
 // ======================
-const buildPath = path.join(__dirname, "../client/build");
-app.use(express.static(buildPath));
-
 app.get("*", (req, res) => {
-  res.sendFile(path.join(buildPath, "index.html"));
+  try {
+    res.sendFile(path.join(buildPath, "index.html"));
+  } catch (err) {
+    console.error("Static serve error:", err);
+    res.status(500).send("Server error");
+  }
 });
+
 
 // ======================
 // 🚀 Start the server
